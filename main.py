@@ -6,7 +6,35 @@ import pickle
 import os
 import atexit
 
-playerresults = None
+gameResults = None
+
+
+class gameData:
+    def __init__(self):
+        self.playerData = {}
+        self.matchupData = {}
+    def recordGame(self, winner, loser):
+        matchupString1 = winner + "~VS~" + loser
+        matchupString2 = loser + "~VS~" + loser
+        # generic player win loss
+        if winner in self.playerData:
+            pass
+        else:
+            pass
+        if loser in self.playerData:
+            pass
+        else:
+            pass
+
+        # add match data for the specific matchup
+        if matchupString1 in self.matchupData:
+            pass
+        elif matchupString2 in self.matchupData:
+            pass
+        else:
+            pass
+
+
 
 
 class player:
@@ -14,6 +42,11 @@ class player:
         self.playerName = playerName
         self.games = 1
         self.wins = 0
+
+class matchup:
+    def __init__(self):
+        pass
+
 
 def cleanup():
     global playerresults
