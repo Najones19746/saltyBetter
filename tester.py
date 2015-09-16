@@ -1,4 +1,4 @@
-__author__ = 'killo'
+__author__ = 'Nick'
 import pickle
 class player:
     def __init__(self,playerName):
@@ -12,7 +12,5 @@ filename = "matches.dat"
 
 matchresults = pickle.load(open(filename, "rb"))
 for item in matchresults.values():
-    print item.playerName
-    print item.games
-    print item.wins
-print type(matchresults).__name__ + " load type"
+    print item.playerName + " games:" + str(item.games) + " wins:" + str(item.wins)
+print type(playerresults).__name__ + " load type"

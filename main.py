@@ -6,7 +6,8 @@ import pickle
 import os
 import atexit
 
-matchresults = None
+playerresults = None
+
 
 class player:
     def __init__(self,playerName):
@@ -15,27 +16,27 @@ class player:
         self.wins = 0
 
 def cleanup():
-    global matchresults
+    global playerresults
     print("exiting...")
-    print type(matchresults).__name__ + " exit type"
-    print matchresults.values()
-    pickle.dump(matchresults, open("matches.dat", "wb"))
+    print type(playerresults).__name__ + " exit type"
+    print playerresults.values()
+    pickle.dump(playerresults, open("matches.dat", "wb"))
 
 
 def main():
     atexit.register(cleanup)
-    global matchresults
+    global playerresults
     filename = "matches.dat"
     firstFighter = None
     secondFighter = None
 
     if (os.path.isfile(filename)):
         print "pickle loaded"
-        matchresults = pickle.load(open(filename, "rb"))
+        playerresults = pickle.load(open(filename, "rb"))
     else:
         print "no pickle data"
-        matchresults = {}
-        print type(matchresults).__name__ + " initial type"
+        playerresults = {}
+        print type(playerresults).__name__ + " initial type"
 
     s = socket.socket()
     server = "irc.twitch.tv"
@@ -75,7 +76,7 @@ def main():
                         secondFighter = message[firstSplit + 3:secondSplit]
                         print(firstFighter + " vs " + secondFighter)
 
-                        for item in matchresults.values():
+                        for item in playerresults.values():
                             if item.playerName == firstFighter:
                                 item.games += 1
                                 foundFirst = True
@@ -83,9 +84,9 @@ def main():
                                 item.games += 1
                                 foundSecond = Trueg
                         if foundFirst == False:
-                            matchresults[firstFighter] = player(firstFighter)
+                            playerresults[firstFighter] = player(firstFighter)
                         if foundSecond == False:
-                            matchresults[secondFighter] = player(secondFighter)
+                            playerresults[secondFighter] = player(secondFighter)
 
 
                     if winCheck > 0:
@@ -93,10 +94,10 @@ def main():
                             winner = message[0:winCheck]
                             if winner == firstFighter:
                                 print("first fighter won!")
-                                matchresults[firstFighter].wins += 1
+                                playerresults[firstFighter].wins += 1
                             elif winner == secondFighter:
                                 print("second fighter won!")
-                                matchresults[secondFighter].wins += 1
+                                playerresults[secondFighter].wins += 1
                             print "winner is " + winner
                         else:
                             print("came in mid fight")
