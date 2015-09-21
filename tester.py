@@ -1,4 +1,7 @@
 __author__ = 'Nick'
+# TODO
+# this file now needs redoing
+
 import pickle
 class player:
     def __init__(self,playerName):

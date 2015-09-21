@@ -2,75 +2,21 @@ __author__ = 'Nick'
 import socket
 import re
 import time
-import pickle
-import os
 import atexit
-
-gameResults = None
-
-
-class gameData:
-    def __init__(self):
-        self.playerData = {}
-        self.matchupData = {}
-    def recordGame(self, winner, loser):
-        matchupString1 = winner + "~VS~" + loser
-        matchupString2 = loser + "~VS~" + loser
-        # generic player win loss
-        if winner in self.playerData:
-            pass
-        else:
-            pass
-        if loser in self.playerData:
-            pass
-        else:
-            pass
-
-        # add match data for the specific matchup
-        if matchupString1 in self.matchupData:
-            pass
-        elif matchupString2 in self.matchupData:
-            pass
-        else:
-            pass
+import saltyRecorder
 
 
-
-
-class player:
-    def __init__(self,playerName):
-        self.playerName = playerName
-        self.games = 1
-        self.wins = 0
-
-class matchup:
-    def __init__(self):
-        pass
-
-
-def cleanup():
-    global playerresults
-    print("exiting...")
-    print type(playerresults).__name__ + " exit type"
-    print playerresults.values()
-    pickle.dump(playerresults, open("matches.dat", "wb"))
+gameResults = saltyRecorder.gameData()
 
 
 def main():
-    atexit.register(cleanup)
-    global playerresults
-    filename = "matches.dat"
+    # variable initialization
+    global gameResults
+    atexit.register(gameResults.cleanup)
     firstFighter = None
     secondFighter = None
 
-    if (os.path.isfile(filename)):
-        print "pickle loaded"
-        playerresults = pickle.load(open(filename, "rb"))
-    else:
-        print "no pickle data"
-        playerresults = {}
-        print type(playerresults).__name__ + " initial type"
-
+    # server connection
     s = socket.socket()
     server = "irc.twitch.tv"
     port = 6667
@@ -83,6 +29,8 @@ def main():
     s.send('PASS ' + oauth + '\r\n')
     s.send('NICK ' + nick + '\r\n')
     s.send('JOIN ' + channel + '\r\n')
+
+    # loop until cancel, atexit handles pickle cleanup and exportation
     while True:
         response = s.recv(1024).decode("utf-8")
         if response.rstrip() == "PING :tmi.twitch.tv":
@@ -100,37 +48,24 @@ def main():
                     winCheck = message.find(" wins! Payouts to Team")
 
                     if betCheck > 0:
-                        foundFirst = False
-                        foundSecond = False
                         print "bets ready"
                         firstSplit = message.find("vs")
                         secondSplit = message.find("!")
+
+                        # the numbers added and removed are the useless padding people call "words" around each fighter
                         firstFighter = message[betCheck + 13:firstSplit - 1]
                         secondFighter = message[firstSplit + 3:secondSplit]
                         print(firstFighter + " vs " + secondFighter)
-
-                        for item in playerresults.values():
-                            if item.playerName == firstFighter:
-                                item.games += 1
-                                foundFirst = True
-                            if item.playerName == secondFighter:
-                                item.games += 1
-                                foundSecond = Trueg
-                        if foundFirst == False:
-                            playerresults[firstFighter] = player(firstFighter)
-                        if foundSecond == False:
-                            playerresults[secondFighter] = player(secondFighter)
-
 
                     if winCheck > 0:
                         if firstFighter is not None:
                             winner = message[0:winCheck]
                             if winner == firstFighter:
                                 print("first fighter won!")
-                                playerresults[firstFighter].wins += 1
+                                gameResults.recordGame(firstFighter, secondFighter)
                             elif winner == secondFighter:
                                 print("second fighter won!")
-                                playerresults[secondFighter].wins += 1
+                                gameResults.recordGame(secondFighter, firstFighter)
                             print "winner is " + winner
                         else:
                             print("came in mid fight")
