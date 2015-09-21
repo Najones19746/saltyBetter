@@ -1,0 +1,54 @@
+(dp0
+S'Yuri di aaaaaa ex~VS~Duck king EX2'
+p1
+(isaltyRecorder
+matchup
+p2
+(dp3
+S'leftPlayerName'
+p4
+S'Yuri di aaaaaa ex'
+p5
+sS'rightPlayerWins'
+p6
+I0
+sS'leftPlayerWins'
+p7
+I1
+sS'rightPlayerName'
+p8
+S'Duck king EX2'
+p9
+sbsS'Saber EX~VS~Dana dee'
+p10
+(isaltyRecorder
+matchup
+p11
+(dp12
+g4
+S'Saber EX'
+p13
+sg6
+I0
+sg7
+I1
+sg8
+S'Dana dee'
+p14
+sbsS'Omega goenitz~VS~Soushihan k.s.k 12p color'
+p15
+(isaltyRecorder
+matchup
+p16
+(dp17
+g4
+S'Omega goenitz'
+p18
+sg6
+I0
+sg7
+I1
+sg8
+S'Soushihan k.s.k 12p color'
+p19
+sbs.
